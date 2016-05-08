@@ -21,8 +21,9 @@ public class UserService {
         }
         User user = new User();
         user.setUsername(username);
-        user.setPassword(DigestUtils.md5Hex(password+"user.password.salt"));
+        user.setPassword(DigestUtils.md5Hex(password+ConfigProp.get("user.password.salt")));
         user.setEmail(email);
+        user.setAvatar(ConfigProp.get("user.default.avatar"));
         user.setCreatetime(DateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
 
         userDao.add(user);
@@ -34,6 +35,17 @@ public class UserService {
 
     public User findByEmail(String email){
         return userDao.findByEmail(email);
+    }
+
+    public User login(String username,String password,String ip){
+        User user = userDao.findByName(username);
+        if (user != null && user.getPassword().equals(DigestUtils.md5Hex(password+ConfigProp.get("user.password.salt")))){
+            user.setLoginip(ip);
+            user.setLogintime(DateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
+            userDao.update(user);
+            return user;
+        }
+        return null;
     }
 
 

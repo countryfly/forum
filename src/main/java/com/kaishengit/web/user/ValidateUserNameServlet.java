@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 public class ValidateUserNameServlet extends BaseServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
         String username = req.getParameter("username");
         username = new String(username.getBytes("ISO8859-1"),"UTF-8");
 
@@ -25,11 +26,20 @@ public class ValidateUserNameServlet extends BaseServlet{
 
         String result = null;
         UserService userService = new UserService();
-        if (userService.findByName(username) == null){
-            result = "true";
+        if ("forget".equals(action)){
+            if (userService.findByName(username) == null){
+                result = "false";
+            }else{
+                result = "true";
+            }
         }else{
-            result = "false";
+            if (userService.findByName(username) == null){
+                result = "true";
+            }else{
+                result = "false";
+            }
         }
+
         rendText(resp,result);
 
     }

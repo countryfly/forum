@@ -9,7 +9,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
  */
 public class UserDao {
     public void add(User user){
-        String sql = "insert into t_user(username,password,email,createtime) values(?,?,?,?)";
+        String sql = "insert into t_user(username,password,email,avatar,createtime) values(?,?,?,?,?)";
         DBHelp.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getCreatetime());
     }
 
@@ -25,6 +25,7 @@ public class UserDao {
 
     public void update(User user){
         String sql = "update t_user set password = ?,avatar= ? , email= ? , loginip = ? , logintime = ? where id = ?";
+        DBHelp.update(sql,user.getPassword(),user.getAvatar(),user.getEmail(),user.getLoginip(),user.getLogintime(),user.getId());
     }
 
     public User findById(Integer id){

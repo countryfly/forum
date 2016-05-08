@@ -23,6 +23,11 @@
         <div class="box-header">
             <span class="title"><i class="fa fa-sign-in"></i> 登录</span>
         </div>
+        <c:choose>
+            <c:when test="${param.state == '1002'}">
+                <div class="alert alert-success">你已经安全退出</div>
+            </c:when>
+        </c:choose>
 
         <form action="" class="form-horizontal" id="loginForm">
             <div class="control-group">
@@ -93,7 +98,8 @@
                     required:true
                 },
                 patchca:{
-                    required:true
+                    required:true,
+                    remote:'/validate/patchca.do'
                 }
             },
             messages:{
@@ -104,7 +110,8 @@
                     required:'请输入密码'
                 },
                 patchca:{
-                    required:'请输入验证码'
+                    required:'请输入验证码',
+                    remote:'验证码不正确'
                 }
             },
             submitHandler:function(form){
@@ -113,7 +120,7 @@
                     url:"/login.do",
                     type:"post",
                     data:$(form).serialize(),
-                    beforesend:function(){
+                    beforeSend:function(){
                         $btn.text("登陆中...").attr("disabled","disabled");
                     },
                     success:function(json){
@@ -122,6 +129,12 @@
                         }else{
                             window.location.href = "/index.do"
                         }
+                    },
+                    error:function(){
+                        alert("服务器错误");
+                    },
+                    complete:function(){
+                        $btn.text("登录").removeAttr("disabled");
                     }
                 });
             }
