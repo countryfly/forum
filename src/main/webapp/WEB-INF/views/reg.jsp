@@ -93,32 +93,33 @@
             rules:{
                 username:{
                     required:true,
-                    rangelength:[6,10],
-                    remote:'/validate/username.do'
+                    rangelength:[3,10],
+                    remote:"/validate/username.do"
+
                 },
                 password:{
                     required:true,
-                    rangelength:[6.10]
+                    rangelength:[6,10]
                 },
                 repassword:{
                     required:true,
-                    rangelength:[6.10],
+                    rangelength:[6,10],
                     equalTo:'#password'
                 },
                 email:{
                     required:true,
                     email:true,
-                    remote:'/validate/email.do'
+                    remote:"/validate/email.do"
                 },
                 patchca:{
                     required:true,
-                    remote:'/validate/patchca.do'
+                    remote:"/validate/patchca.do"
                 }
             },
             messages:{
                 username:{
                     required:'请输入账号',
-                    rangelength:'账号长度6~10位',
+                    rangelength:'账号长度3~10位',
                     remote:'该账号已被占用'
                 },
                 password:{
@@ -139,8 +140,31 @@
                     required:'请输入验证码',
                     remote:'验证码输入错误'
                 }
+            },
+            submitHandler:function(form){
+                $.post("/reg.do",$(form).serialize()).done(function(result){
+                    if(result.state == "error"){
+                        alert(result.message);
+                    }else{
+                        $("#regMsg").removeClass("hide");
+                        var sec = 3;
+                        setInterval(function(){
+                            sec--;
+                            if(sec == 0){
+                                window.location.href = "/login.do";
+                                return;
+                            }
+                            $("#regMsg .sec").text(sec);
+                        },1000);
+                    }
+                }).fail(function(){
+                    alert("服务器错误");
+                });
             }
         });
+
+
+
     });
 </script>
 </body>

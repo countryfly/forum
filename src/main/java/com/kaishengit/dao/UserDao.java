@@ -9,8 +9,8 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
  */
 public class UserDao {
     public void add(User user){
-        String sql = "insert into t_user(username,password,email,avatar,createtime) values(?,?,?,?,?)";
-        DBHelp.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getAvatar(),user.getCreatetime());
+        String sql = "insert into t_user(username,password,email,createtime) values(?,?,?,?)";
+        DBHelp.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getCreatetime());
     }
 
     public User findByName(String username){
